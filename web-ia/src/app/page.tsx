@@ -1,35 +1,48 @@
+'use client'
+
 import React from "react";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import AlgorithmCard from "./components/algorithmCard";
 import "./App.css";
 
 const algorithms = [
   {
-    title: "Algorithm 1",
-    description: "Description for Algorithm 1",
+    title: "Chatbot",
+    description: "Talk to a chatbot",
+    link: "/chatbot"
   },
   {
-    title: "Algorithm 2",
-    description: "Description for Algorithm 2",
+    title: "Emotions",
+    description: "Detect emotions through your camera",
+    link: "/emotions"
   },
-  // Add more algorithms here...
 ];
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="md">
-      <Grid container spacing={4}>
-        {algorithms.map((algorithm, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <AlgorithmCard
-              title={algorithm.title}
-              description={algorithm.description}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <Typography variant="h2" component="div" gutterBottom>
+        Proyecto IA
+      </Typography>
+      <Container maxWidth="md">
+        <Grid container spacing={4} justifyContent="center">
+          {algorithms.map((algorithm, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <AlgorithmCard
+                title={algorithm.title}
+                description={algorithm.description}
+                link={algorithm.link}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+      <Typography variant="body1" component="div" align="right" style={{ marginTop: 'auto' }}>
+        Ronald Arce, Sebastian Castro, Maykel Porras
+      </Typography>
+    </div>
   );
 };
 
 export default App;
+
