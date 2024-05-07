@@ -18,17 +18,18 @@ import SmallCard from "./components/smallCards";
 import "./Chatbot.css";
 import { useModel } from "../../shared/hooks/useModel";
 import { useSpeechToText } from "../../shared/hooks/useSpeechToText";
+import ModelParametersModal from "./components/ModelParametersModal";
 
 const cardNames = [
   "cirrhosis",
   "bitcoin",
   "wine",
-  "cerebral_stroke",
+  "stroke",
   "phone_company_churn",
   "covid",
   "bmi",
-  "car",
-  "avocato",
+  "car_price",
+  "avocado_price",
   "hepatitis",
 ];
 
@@ -36,14 +37,135 @@ const cardDescriptions: { [key: string]: string } = {
   cirrhosis: "Classify the type of cirrhosis",
   bitcoin: "Predict the price of bitcoin",
   wine: "Classify the quality of wine",
-  cerebral_stroke: "Classify if a patient will have a stroke",
+  stroke: "Classify if a patient will have a stroke",
   phone_company_churn:
     "Classify if a customer is going to switch cell companies",
   covid: "Predict the number of COVID-19 cases",
   bmi: "Predict a patient's body mass index",
-  car: "Predict the price of a car",
-  avocato: "Predict the price of avocado",
+  car_price: "Predict the price of a car",
+  avocado_price: "Predict the price of avocado",
   hepatitis: "Classify what type of hepatitis a patient has",
+};
+
+const modelParameters: { [key: string]: string[] } = {
+  bitcoin: ["volume", "market_cap"],
+  cirrhosis: [
+    "cholesterol",
+    "albumin",
+    "copper",
+    "alk_phos",
+    "tryglicerides",
+    "platelets",
+    "prothrombin",
+  ],
+  wine: [
+    "fixed_acidity",
+    "volatile_acidity",
+    "citric_acid",
+    "residual_sugar",
+    "chlorides",
+    "free_sulfur_dioxide",
+    "total_sulfur_dioxide",
+    "density",
+    "pH",
+    "sulphates",
+    "alcohol",
+  ],
+  stroke: [
+    "age",
+    "hypertension",
+    "heart_disease",
+    "avg_glucose_level",
+    "bmi",
+    "gender_Male",
+    "gender_Other",
+    "ever_married_Yes",
+    "work_type_Never_worked",
+    "work_type_Private",
+    "work_type_Self-employed",
+    "work_type_children",
+    "Residence_type_Urban",
+    "smoking_status_formerly_smoked",
+    "smoking_status_never_smoked",
+    "smoking_status_smokes",
+  ],
+  phone_company_churn: [
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "tenure",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod",
+    "MonthlyCharges",
+    "TotalCharges",
+  ],
+  covid: [
+    "SNo",
+    "ObservationDate",
+    "Province/State",
+    "Country/Region",
+    "Last Update",
+    "Confirmed",
+    "Deaths"
+  ],
+  bmi: [
+    "density",
+    "Percent_body_fat",
+    "age",
+    "weight",
+    "height",
+    "neck",
+    "chest",
+    "abdomen",
+    "hip",
+    "thigh",
+    "knee",
+    "ankle",
+    "biceps",
+    "forearm",
+    "wrist"
+  ],
+  car_price: [
+    "year",
+    "selling_price",
+    "kms_driven",
+    "fuel_type",
+    "seller_type",
+    "transmission",
+    "owner"
+  ], 
+  avocado_price: [
+    "total_volume",
+    "4046",
+    "4225",
+    "4770",
+    "total_bags",
+    "small_bags",
+    "large_bags",
+    "xlarge_bags",
+    "type",
+    "year",
+    "month",
+    "spring",
+    "summer",
+    "fall"
+  ],
+  hepatitis: [
+    "AST",
+    "BIL",
+    "GGT"
+  ],
 };
 
 const Chatbot: React.FC = () => {
@@ -68,7 +190,7 @@ const Chatbot: React.FC = () => {
         target: { value: transcript },
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
 
   const handleCardClick = (cardName: string) => {
@@ -105,6 +227,33 @@ const Chatbot: React.FC = () => {
       if (message.toLowerCase().includes("bitcoin")) {
         setSelectedCard("bitcoin");
         setModel({ name: "bitcoin", parameters: {} });
+      } else if (message.toLowerCase().includes("cirrhosis")) {
+        setSelectedCard("cirrhosis");
+        setModel({ name: "cirrhosis", parameters: {} });
+      } else if (message.toLowerCase().includes("wine")) {
+        setSelectedCard("wine");
+        setModel({ name: "wine", parameters: {} });
+      } else if (message.toLowerCase().includes("stroke")) {
+        setSelectedCard("stroke");
+        setModel({ name: "stroke", parameters: {} });
+      } else if (message.toLowerCase().includes("phone_company_churn")) {
+        setSelectedCard("phone_company_churn");
+        setModel({ name: "phone_company_churn", parameters: {} });
+      }else if (message.toLowerCase().includes("covid")) {
+        setSelectedCard("covid");
+        setModel({ name: "covid", parameters: {} });
+      }else if (message.toLowerCase().includes("bmi")) {
+        setSelectedCard("bmi");
+        setModel({ name: "bmi", parameters: {} });
+      }else if (message.toLowerCase().includes("car_price")) {
+        setSelectedCard("car_price");
+        setModel({ name: "car_price", parameters: {} });
+      }else if (message.toLowerCase().includes("avocato_price")) {
+        setSelectedCard("avocato_price");
+        setModel({ name: "avocato_price", parameters: {} });
+      }else if (message.toLowerCase().includes("hepatitis")) {
+        setSelectedCard("hepatitis");
+        setModel({ name: "hepatitis", parameters: {} });
       }
       event.target.value = "";
     }
@@ -140,7 +289,7 @@ const Chatbot: React.FC = () => {
                   handleChatInputChange({
                     key: event.key,
                     target: { value: message },
-                  }); 
+                  });
                 }
               }}
             />
@@ -160,36 +309,14 @@ const Chatbot: React.FC = () => {
           ))}
         </div>
       </div>
-      <Dialog open={selectedCard !== null} onClose={handleDialogClose}>
-        <DialogTitle>Enter model parameters for {selectedCard}</DialogTitle>
-        <DialogContent>
-          {selectedCard === "bitcoin" && (
-            <>
-              <TextField
-                name="volume"
-                label="Volume"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                onChange={handleInputChange}
-              />
-              <TextField
-                name="market_cap"
-                label="Market Cap"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                onChange={handleInputChange}
-              />
-            </>
-          )}
-          {/* Aquí irían los campos de entrada para los parámetros de otros modelos */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleDialogSubmit}>Submit</Button>
-        </DialogActions>
-      </Dialog>
+      <ModelParametersModal
+        open={selectedCard !== null}
+        onClose={handleDialogClose}
+        onSubmit={handleDialogSubmit}
+        model={selectedCard || ""}
+        parameters={modelParameters[selectedCard || ""] || []}
+        onInputChange={handleInputChange}
+      />
     </div>
   );
 };
