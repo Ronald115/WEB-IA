@@ -13,10 +13,11 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { Mic } from "@mui/icons-material";
+import { Mic, MicOff } from "@mui/icons-material";
 import SmallCard from "./components/smallCards";
 import "./Chatbot.css";
 import { useModel } from "../../shared/hooks/useModel";
+import { useSpeechToText } from "../../shared/hooks/useSpeechToText";
 
 const cardNames = [
   "cirrhosis",
@@ -36,7 +37,8 @@ const cardDescriptions: { [key: string]: string } = {
   bitcoin: "Predict the price of bitcoin",
   wine: "Classify the quality of wine",
   cerebral_stroke: "Classify if a patient will have a stroke",
-  phone_company_churn: "Classify if a customer is going to switch cell companies",
+  phone_company_churn:
+    "Classify if a customer is going to switch cell companies",
   covid: "Predict the number of COVID-19 cases",
   bmi: "Predict a patient's body mass index",
   car: "Predict the price of a car",
@@ -44,11 +46,11 @@ const cardDescriptions: { [key: string]: string } = {
   hepatitis: "Classify what type of hepatitis a patient has",
 };
 
-
 const Chatbot: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<string[]>([]);
   const { model, setModel, submitModel } = useModel();
+  const { isRecording, transcript, toggleRecording } = useSpeechToText();
 
   useEffect(() => {
     if (model && model.result) {
@@ -58,6 +60,16 @@ const Chatbot: React.FC = () => {
       ]);
     }
   }, [model]);
+
+  useEffect(() => {
+    if (transcript) {
+      handleChatInputChange({
+        key: "Enter",
+        target: { value: transcript },
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transcript]);
 
   const handleCardClick = (cardName: string) => {
     setSelectedCard(cardName);
@@ -128,12 +140,12 @@ const Chatbot: React.FC = () => {
                   handleChatInputChange({
                     key: event.key,
                     target: { value: message },
-                  });
+                  }); 
                 }
               }}
             />
-            <IconButton>
-              <Mic />
+            <IconButton onClick={toggleRecording}>
+              {isRecording ? <MicOff /> : <Mic />}
             </IconButton>
           </div>
         </div>
