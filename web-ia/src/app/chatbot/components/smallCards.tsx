@@ -5,11 +5,17 @@ import "./SmallCard.css";
 interface SmallCardProps {
   title: string;
   description: string;
+  onClick: () => void;
 }
 
-const SmallCard: React.FC<SmallCardProps> = ({ title, description }) => {
+const SmallCard: React.FC<SmallCardProps> = ({
+  title,
+  description,
+  onClick,
+}) => {
   return (
-    <Card className="small-card">
+    <Card className="small-card" onClick={onClick}>
+      {" "}
       <CardContent>
         <Typography variant="h6" component="h2">
           {title}

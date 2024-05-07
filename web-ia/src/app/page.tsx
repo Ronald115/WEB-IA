@@ -38,7 +38,7 @@ const App: React.FC = () => {
         </Grid>
       </Container>
       <Typography variant="body1" component="div" align="right" style={{ marginTop: 'auto' }}>
-        Ronald Arce, Sebastian Castro, Maykel Porras
+        Ronald Arce, Sebastian Castro, Mayckel Porras
       </Typography>
     </div>
   );
